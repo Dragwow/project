@@ -1,0 +1,33 @@
+server:
+  port: 8091
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: jdbc:postgresql://auth-db:5432/authdb
+    username: auth
+    password: auth
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      auto-commit: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+
+  kafka:
+    bootstrap-servers: broker:9092
+
+    consumer:
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+
+    producer:
+        key-serializer: org.apache.kafka.common.serialization.StringSerializer
+        value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+
+jwt:
+  private-key-path: ${JWT_PRIVATE_KEY_PATH:/run/secrets/jwt/private.pem}
+  public-key-path: ${JWT_PUBLIC_KEY_PATH:/run/secrets/jwt/public.pem}
+  expiration-ms: ${JWT_EXPIRATION_MS:3600000}

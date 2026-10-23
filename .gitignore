@@ -1,0 +1,7 @@
+# RSA keys and secrets
+/secrets/
+.env
+.env.*
+
+# IDE
+.idea/
