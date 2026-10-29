@@ -16,6 +16,7 @@
         <module>auth-service</module>
         <module>utils-service</module>
         <module>gateway</module>
+        <module>cache</module>
     </modules>
 
     <properties>

@@ -27,7 +27,22 @@ spring:
         key-serializer: org.apache.kafka.common.serialization.StringSerializer
         value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail.smpt.auth: true
+      mail.smpt.starttls.enable: true
 jwt:
   private-key-path: ${JWT_PRIVATE_KEY_PATH:/run/secrets/jwt/private.pem}
   public-key-path: ${JWT_PUBLIC_KEY_PATH:/run/secrets/jwt/public.pem}
   expiration-ms: ${JWT_EXPIRATION_MS:3600000}
+
+app:
+  cookie:
+    name: ACCESS_TOKEN
+    secure: ${COOKIE_SECURE:false}
+    same-site: ${COOKIE_SAME_SITE:Lax}
+    path: /

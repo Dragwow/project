@@ -1,7 +1,7 @@
 package com.yumimi.authservice.controller;
 
 import com.yumimi.authservice.dto.request.RegistrationRequest;
-import com.yumimi.authservice.facade.RegUser;
+import com.yumimi.authservice.facade.RegistrationUserFacade;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("/api/auth/register")
 @RequiredArgsConstructor
-public class Controller {
+public class RegisterController {
 
-    private final RegUser regUser;
+    private final RegistrationUserFacade regUser;
 
     @PostMapping("/registration")
     public ResponseEntity<Void> create(@Valid @RequestBody RegistrationRequest request){

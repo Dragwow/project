@@ -1,5 +1,6 @@
 package com.yumimi.authservice.dto.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,11 +11,12 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class loginRequest {
+public class AuthRequest {
 
     @NotBlank( message = "Username must be blank")
     private String username;
 
     @NotBlank(message = "Password must be blank")
     private String password;
+
 }

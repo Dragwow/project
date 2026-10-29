@@ -5,6 +5,7 @@ networks:
 volumes:
   user_postgres_data:
   auth_postgres_data:
+  redis_data:
 
 services:
   ## MICROSERVICES
@@ -46,6 +47,8 @@ services:
       JWT_PRIVATE_KEY_PATH: /run/secrets/jwt/private.pem
       JWT_PUBLIC_KEY_PATH: /run/secrets/jwt/public.pem
       JWT_EXPIRATION_MS: 3600000
+      COOKIE_SECURE: "false"
+      COOKIE_SAME_SITE: Lax
     volumes:
       - ./secrets/private.pem:/run/secrets/jwt/private.pem:ro
       - ./secrets/public.pem:/run/secrets/jwt/public.pem:ro
@@ -115,5 +118,14 @@ services:
       - auth_postgres_data:/var/lib/postgresql/data
     networks:
       - my-networks
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
 
 

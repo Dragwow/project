@@ -13,7 +13,7 @@ cloud:
           - id: auth-service
             uri: http://auth-service:8091
             predicates:
-              - Path=/api/registration/**, api/auth/**
+              - Path=/api/auth/register/**, api/auth/**
 
           - id: user-service
             uri: http://user-service:8090
