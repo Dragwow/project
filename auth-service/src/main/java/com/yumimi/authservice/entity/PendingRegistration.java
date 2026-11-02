@@ -4,9 +4,7 @@ import com.yumimi.utilsservice.basepackages.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +13,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "pending_registrations")
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class PendingRegistration extends BaseEntity {
 
     @Column(nullable = false, unique = true)
@@ -34,6 +34,10 @@ public class PendingRegistration extends BaseEntity {
 
     @Column(name = "otp_hash", nullable = false)
     private String otpHash;
+
+    @Builder.Default
+    @Column(nullable = false, columnDefinition = "integer default 0")
+    private int attempts = 0;
 
     @Column(name = "expires_at", nullable = false)
     private LocalDateTime expiresAt;

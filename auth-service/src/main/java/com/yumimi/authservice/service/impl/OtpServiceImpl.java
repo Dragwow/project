@@ -1,57 +1,33 @@
 package com.yumimi.authservice.service.impl;
 
-import com.yumimi.authservice.entity.OtpEntry;
-import com.yumimi.authservice.repository.OtpEntryRepository;
-import com.yumimi.authservice.service.MailService;
 import com.yumimi.authservice.service.OtpService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.Random;
+import java.security.SecureRandom;
 
 @Service
 @RequiredArgsConstructor
 public class OtpServiceImpl implements OtpService {
 
-    private final OtpEntryRepository repository;
-    private final MailService service;
+    private static final SecureRandom RANDOM = new SecureRandom();
+
+    private final PasswordEncoder passwordEncoder;
+
 
     @Override
-    @CacheEvict(value = "otpCache", key = "#email")
-    public void sendOtp(String email) {
-        String code = String.valueOf(new Random().nextInt(900000)+99999);
-        repository.save(OtpEntry.builder()
-                .email(email)
-                .code(code)
-                .createdAt(LocalDateTime.now())
-                .expiresAt(LocalDateTime.now().plusMinutes(5))
-                .used(false)
-                .build());
-        service.sendMessage(email, "Code", "You`re code" + code);
+    public String generateCode() {
+        return String.format("%06d", RANDOM.nextInt(1_000_000));
     }
 
     @Override
-    @CachePut(value = "otpCache", key = "#email")
-    public void removeOtp(String email) {}
+    public String hash(String code) {
+        return passwordEncoder.encode(code);
+    }
 
     @Override
-    @Transactional
-    public boolean verifyOtp(String email, String code) {
-        Optional<OtpEntry> otpEntry = repository.findTopByEmailAndUsedFalseOrderByCreatedAtDesc(email);
-        if (otpEntry.isEmpty()) return false;
-
-        OtpEntry otp = otpEntry.get();
-        if (!otp.getCode().equals(code)) return false;
-        if (otp.getExpiresAt().isBefore(LocalDateTime.now())) return false;
-
-        otp.setUsed(true);
-        repository.save(otp);
-        return true;
-
+    public boolean matches(String code, String hash) {
+        return passwordEncoder.matches(code, hash);
     }
 }
