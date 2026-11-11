@@ -24,6 +24,6 @@ public interface PendingRegistrationRepository extends BaseRepository<PendingReg
     void deleteByEmail(@Param("email") String email);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
-    @Query("delete from PendingRegistration p where p.expiresAt = :now")
+    @Query("delete from PendingRegistration p where p.expiresAt < :now")
     void deleteExpired(@Param("now") LocalDateTime now);
 }

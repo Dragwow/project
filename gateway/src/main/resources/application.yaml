@@ -13,9 +13,17 @@ spring:
             - id: auth-service
               uri: http://auth-service:8091
               predicates:
-                - Path=/api/register/**, api/auth/**
+                - Path=/api/auth/**
 
             - id: user-service
               uri: http://user-service:8090
               predicates:
                 - Path=/api/users/**
+          default-filters:
+            - DedupeResponseHeader=X-Request-Id, RETAIN_FIRST
+
+logging:
+  level:
+    root: INFO
+    com.yumimi: INFO
+    org.springwramework.cloud.gateway: INFO

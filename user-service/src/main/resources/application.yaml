@@ -1,5 +1,7 @@
 server:
   port: 8090
+  address: 0.0.0.0
+
 
 spring:
   application:
@@ -14,5 +16,25 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     open-in-view: false
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:broker:9092}
+    consumer:
+      group-id: user-group
+      auto-offset-reset: earliest
+      key-serializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-serializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      properties:
+        spring.deserializer.key.delegate.class: org.apache.kafka.common.serialization.StringSerializer
+        spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JacksonJsonSerializer
+        spring.json,trusted.packages: com.yumimi.eventsservice.events
+
+logging:
+  level:
+    root: INFO
+    com.yumimi: INFO
+    org.apache.kafka: WARN
+    org.hibernate.orm.jdbc.warn: ERROR
+  pattern:
+    correlation: "[%X{requestId:-}] "

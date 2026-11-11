@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class VerifyCodeRequest {
+public class RegisterVerifyRequest {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")

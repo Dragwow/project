@@ -1,5 +1,6 @@
 package com.yumimi.authservice.service.impl;
 
+import com.yumimi.authservice.config.JwtProperties;
 import com.yumimi.authservice.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -26,27 +27,13 @@ public class JwtServiceImpl implements JwtService {
     private final PublicKey publicKey;
     private final PrivateKey privateKey;
     private final long expirationMs;
+    private final String issuer;
 
-    public JwtServiceImpl(
-            @Value("${jwt.private-key-path:secrets/private.pem}")
-            String privateKeyPath,
-
-            @Value("${jwt.public-key-path:secrets/public.pem}")
-            String publicKeyPath,
-
-            @Value("${jwt.expiration-ms:3600000}")
-            long expirationMs
-
-    ){
-        if (expirationMs <= 0){
-            throw new IllegalArgumentException(
-                    "Jwt expiration must be greater then zero"
-            );
-        }
-
-        this.privateKey = loadPrivateKey(privateKeyPath);
-        this.publicKey = loadPublicKey(publicKeyPath);
-        this.expirationMs = expirationMs;
+    public JwtServiceImpl(JwtProperties prop){
+        this.privateKey = loadPrivateKey(prop.privateKeyPath());
+        this.publicKey = loadPublicKey(prop.publicKeyPath());
+        this.expirationMs = prop.expirationMs();
+        this.issuer = prop.issuer();
     }
 
     @Override
@@ -63,6 +50,7 @@ public class JwtServiceImpl implements JwtService {
         );
 
         return Jwts.builder()
+                .issuer(issuer)
                 .subject(username)
                 .issuedAt(now)
                 .expiration(expiration)
@@ -100,6 +88,7 @@ public class JwtServiceImpl implements JwtService {
 
         return Jwts.parser()
                 .verifyWith(publicKey)
+                .requireIssuer(issuer)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();

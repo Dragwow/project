@@ -15,15 +15,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: false
     open-in-view: false
 
   kafka:
-    bootstrap-servers: broker:9092
-
-    consumer:
-      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:broker:9092}
     producer:
         key-serializer: org.apache.kafka.common.serialization.StringSerializer
         value-serializer: org.springframework.kafka.support.serializer.JacksonJsonSerializer
@@ -40,6 +36,16 @@ spring:
           starttls:
             enable: true
             required: true
+
+logging:
+  level:
+    root: INFO
+    com.yumimi: INFO
+    org.apache.kafka: WARN
+    org.hibernate.orm.jdbc.warn: ERROR
+  pattern:
+    correlation: "[%X{requestId:-}] "
+
 jwt:
   private-key-path: ${JWT_PRIVATE_KEY_PATH:/run/secrets/jwt/private.pem}
   public-key-path: ${JWT_PUBLIC_KEY_PATH:/run/secrets/jwt/public.pem}
@@ -51,3 +57,5 @@ app:
     secure: ${COOKIE_SECURE:false}
     same-site: ${COOKIE_SAME_SITE:Lax}
     path: /
+  login:
+    verification-enabled: ${LOGIN_VERIFICATION_ENABLED:true}

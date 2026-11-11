@@ -2,12 +2,12 @@ package com.yumimi.authservice.config;
 
 import com.yumimi.authservice.repository.AuthUserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-@Configuration
+@Service
 @RequiredArgsConstructor
 public class UserDetailsConfig implements UserDetailsService {
 

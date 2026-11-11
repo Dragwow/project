@@ -35,11 +35,11 @@ public class RegistrationRequest {
     private String lastName;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 8, max = 73)
+    @Size(min = 8, max = 72)
     private String password;
 
     @NotBlank(message = "Second password is required")
-    @Size(min = 8, max = 73)
+    @Size(min = 8, max = 72)
     private String secondPassword;
 
 
